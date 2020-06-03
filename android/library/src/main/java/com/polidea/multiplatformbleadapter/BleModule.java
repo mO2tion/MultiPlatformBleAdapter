@@ -1,6 +1,7 @@
 package com.polidea.multiplatformbleadapter;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
@@ -412,6 +413,12 @@ public class BleModule implements BleAdapter {
                     break;
                 }
             }
+        }
+
+        // add bonded devices, ignoring service uuids
+        for (BluetoothDevice bluetoothDevice : bluetoothAdapter.getBondedDevices()) {
+            Device device = new Device(bluetoothDevice.getAddress(), bluetoothDevice.getName());
+            localConnectedDevices.add(device);
         }
 
         onSuccessCallback.onSuccess(localConnectedDevices.toArray(new Device[localConnectedDevices.size()]));
